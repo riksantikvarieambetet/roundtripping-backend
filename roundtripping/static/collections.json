@@ -1,0 +1,23 @@
+[
+    {
+        "id": "9300bc3d-c276-4b1f-a913-19e8ab905582",
+        "owner": "ea6eaddf-fa53-479c-91e2-3b2a3a0fef32",
+        "type": "category",
+        "platform": "commons",
+        "generator_value": "Stereo_cards_in_the_Swedish_Performing_Arts_Agency"
+    },
+    {
+        "id": "a4295693-edba-42c2-8fe9-5741b7ff2f9a",
+        "owner": "ea6eaddf-fa53-479c-91e2-3b2a3a0fef32",
+        "type": "property",
+        "platform": "wikidata",
+        "generator_value": "P4357"
+    },
+    {
+        "id": "0b73f042-e51f-4c01-a629-74fedd37d145",
+        "owner": "0d7a007f-348b-41dc-bbfb-1c74967f7ac7",
+        "type": "category",
+        "platform": "commons",
+        "generator_value": "Images_from_Nordiska_museet"
+    }
+]

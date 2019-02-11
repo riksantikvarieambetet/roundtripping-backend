@@ -1,0 +1,6 @@
+.vscode
+apicache-py3
+roundtripping/static/cache/*/*.json
+pywikibot.lwp
+throttle.ctrl
+.DS_Store
