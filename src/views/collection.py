@@ -6,7 +6,7 @@ from flask_restful import Resource, abort
 class Collection(Resource):
     def get(self, institution, collection):
         data = False
-        with open('roundtripping/static/collections.json') as json_file:
+        with open('src/static/collections.json') as json_file:
             data = json.load(json_file)
 
         found_collection = False

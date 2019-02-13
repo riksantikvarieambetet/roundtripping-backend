@@ -63,5 +63,5 @@ for page in gen:
 for i, chunk in enumerate(chunks(final_translations, 50)):
     page = i + 1
 
-    with open('roundtripping/static/cache/translations/{}_{}.json'.format(found_collection, page), 'w') as outfile:
+    with open('src/static/cache/translations/{}_{}.json'.format(found_collection, page), 'w') as outfile:
         json.dump(chunk, outfile)
