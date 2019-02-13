@@ -13,11 +13,11 @@ if sys.version[0] == '2':
     reload(sys)
     sys.setdefaultencoding('utf-8')
 
-application = Flask(__name__)
-api = Api(application)
+app = Flask(__name__)
+api = Api(app)
 
 # CORS headers
-@application.after_request
+@app.after_request
 def after_request(resp):
     resp.headers.add('Access-Control-Allow-Origin', '*')
     resp.headers.add('Access-Control-Allow-Methods', 'GET, HEAD, OPTIONS')
@@ -30,4 +30,4 @@ api.add_resource(Collection, '/institutions/<uuid:institution>/collections/<uuid
 api.add_resource(Translations, '/changes/<uuid:collection>/translations')
 
 if __name__ == '__main__':
-    application.run()
+    app.run()
