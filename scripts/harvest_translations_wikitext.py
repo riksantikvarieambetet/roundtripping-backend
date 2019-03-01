@@ -2,6 +2,7 @@ import sys
 import json
 
 import requests
+import mwparserfromhell
 
 from pywikibot.pagegenerators import CategorizedPageGenerator
 from pywikibot import Site, Category
@@ -28,7 +29,6 @@ if not found_collection:
 site = Site('commons', 'commons')
 cat =  Category(site, 'Category:{}'.format(arg))
 gen = CategorizedPageGenerator(cat, recurse=False, namespaces=6)
-endpoint = 'https://commons.wikimedia.org/w/api.php?format=json&action=wbgetentities&ids='
 
 final_translations = list()
 
@@ -38,25 +38,30 @@ def chunks(l, n):
         yield l[i:i + n]
 
 for page in gen:
+    wikicode = mwparserfromhell.parse(page.text)
 
-    media_id = 'M{}'.format(page.pageid)
-    translations = False
-    local_id = 'in-the-future'
+    template_to_parse = False
+    for template in wikicode.filter_templates():
+        if template.name.matches('Musikverket-image'):
+            template_to_parse = template
 
-    print(media_id)
-    url = endpoint + str(media_id)
-    response = requests.get(url)
-    data = response.json()
-    try:
-        labels = data['entities'][list(data['entities'].keys())[0]]['labels'].values()
-    except KeyError:
+    if not template_to_parse:
+        print('failed to find given template')
         continue
 
-    translations = list(labels)
+    media_id = 'M{}'.format(page.pageid)
+    local_id = mwparserfromhell.parse(template_to_parse).filter_templates()[0].get('ID').value.lstrip()
+
+    translations = list()
+    for description in mwparserfromhell.parse(template_to_parse).filter_templates()[0].get('description').value.filter_templates():
+        translation = {}
+        translation['language'] = str(description.name)
+        translation['value'] = str(description.get(1))
+        translations.append(translation)
 
     final_obj = {}
     final_obj['mediainfo_id'] = media_id
-    final_obj['local_id'] = local_id
+    final_obj['local_id'] = str(local_id)
     final_obj['translations'] = translations
     final_translations.append(final_obj)
 
