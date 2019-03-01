@@ -13,4 +13,20 @@ pipenv install
 pipenv run python src/app.py
 ```
 
-...
+## Deploy
+
+The following applies to the deployment on Tool Forge (Stretch).
+Note: Make sure that requirements.txt is in sync with pipenv.
+
+```bash
+become roundtripping
+webservice --backend=kubernetes python stop
+cd www/python
+git pull
+cd ../..
+webservice --backend=kubernetes python shell
+source $HOME/www/python/venv/bin/activate
+pip install -r $HOME/www/python/requirements.txt
+exit
+webservice --backend=kubernetes python start
+```
