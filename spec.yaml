@@ -1,0 +1,183 @@
+openapi: 3.0.0
+info:
+  title: Roundtripping API
+  description: Roundtripping API
+  version: 0.1.0
+  contact:
+    name: Albin Larsson
+    email: albin.larsson@raa.se
+paths:
+  /instututions:
+    get:
+      summary: Returns a list of institutions.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/instutution'
+
+  /instututions/{uuid}/collections:
+    get:
+      summary: Returns a list of collections that belong to the given instutution.
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/collection'
+
+  /instututions/{uuid}/collections/{uuid2}:
+    get:
+      summary: Returns a collection that belong to the given instutution.
+      parameters:
+        - name: uuid
+          in: path
+          required: true
+          schema:
+            type : string
+        - name: uuid2
+          in: path
+          required: true
+          schema:
+            type : string
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uuid:
+                    type: string
+                    example: ea6eaddf-fa53-479c-91e2-3b2a3a0fef32
+                  type:
+                    type: string
+                    example: category
+                  platform:
+                    type: string
+                    example: commons
+                  generator_value:
+                    type: string
+                    example: Category_of_images_from_Musikverket
+                  translation_count:
+                    type: integer
+                    example: 640
+                  changes_count:
+                    type: integer
+                    example: 567
+
+  /changes/{collection-uuid}/translations:
+    get:
+      summary: Returns mediainfo items with new translations since upload.
+      parameters:
+        - name: collection-uuid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/translation'
+  
+  /changes/{collection-uuid}/translations/progress:
+    get:
+      summary: Returns progress statistics for the given collection campaign.
+      parameters:
+        - name: collection-uuid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/translation_statistics'
+
+components:
+  schemas:
+
+    collection:
+      type: object
+      properties:
+        uuid:
+          type: string
+          example: ea6eaddf-fa53-479c-91e2-3b2a3a0fef32
+        type:
+          type: string
+          example: category
+        platform:
+          type: string
+          example: commons
+
+    translation:
+      type: object
+      properties:
+        mediainfo_id:
+          type: string
+          example: M9876675
+        local_id:
+          type: string
+          example: something
+        translations:
+          type: array
+          items:
+            type: object
+            properties:
+              lang:
+                type: string
+                example: sv
+              value:
+                type: string
+                example: Hej, mitt namn är Albin.
+
+    translation_statistics:
+      type: object
+      properties:
+        percentage:
+          type: string
+          example: 70
+
+    instutution:
+      type: object
+      properties:
+        id:
+          type: string
+          example: ea6eaddf-fa53-479c-91e2-3b2a3a0fef32
+        name:
+          type: string
+          example: Musikverket
