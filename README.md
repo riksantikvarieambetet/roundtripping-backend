@@ -10,7 +10,7 @@ cd roundtripping-backend
 pipenv install
 
 # start application
-pipenv run python src/app.py
+cd src && pipenv run python app.py
 ```
 
 ...

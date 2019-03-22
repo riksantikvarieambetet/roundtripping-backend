@@ -7,6 +7,7 @@ from views.institutions import Institutions
 from views.collections import Collections
 from views.collection import Collection
 from views.changes.translations import Translations
+from views.changes.translations_progress import Translations_Progress
 
 # http://www.ianbicking.org/illusive-setdefaultencoding.html
 if sys.version[0] == '2':
@@ -28,6 +29,7 @@ api.add_resource(Institutions, '/institutions')
 api.add_resource(Collections, '/institutions/<uuid:institution>/collections')
 api.add_resource(Collection, '/institutions/<uuid:institution>/collections/<uuid:collection>')
 api.add_resource(Translations, '/changes/<uuid:collection>/translations')
+api.add_resource(Translations_Progress, '/changes/<uuid:collection>/translations/progress')
 
 if __name__ == '__main__':
     app.run()
