@@ -1,3 +1,4 @@
+import datetime
 import sys
 import json
 
@@ -37,6 +38,8 @@ def chunks(l, n):
     for i in range(0, len(l), n):
         yield l[i:i + n]
 
+n_sv_translations = 0
+n_en_translations = 0
 for page in gen:
     wikicode = mwparserfromhell.parse(page.text)
 
@@ -55,6 +58,14 @@ for page in gen:
     translations = list()
     for description in mwparserfromhell.parse(template_to_parse).filter_templates()[0].get('description').value.filter_templates():
         translation = {}
+        # prep stats and ignore everything that's not English or Swedish
+        if str(description.name) == 'sv':
+            n_sv_translations += 1
+        elif str(description.name) == 'en':
+            n_en_translations += 1
+        else:
+            continue
+
         translation['language'] = str(description.name)
         translation['value'] = str(description.get(1))
         translations.append(translation)
@@ -64,6 +75,13 @@ for page in gen:
     final_obj['local_id'] = str(local_id)
     final_obj['translations'] = translations
     final_translations.append(final_obj)
+
+t = datetime.datetime.now()
+stats = {}
+stats['progress'] = round(100 * n_en_translations / n_sv_translations)
+stats['timestamp'] = t.strftime('%Y-%m-%d-%H-%M')
+with open('src/static/cache/translations/{}_stats.json'.format(found_collection), 'w') as outfile:
+    json.dump(stats, outfile)
 
 for i, chunk in enumerate(chunks(final_translations, 50)):
     page = i + 1

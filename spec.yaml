@@ -169,8 +169,11 @@ components:
       type: object
       properties:
         percentage:
-          type: string
+          type: integer
           example: 70
+        timestamp:
+          type: string
+          example: '2019-03-23-17-45'
 
     instutution:
       type: object
