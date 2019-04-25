@@ -56,18 +56,28 @@ for page in gen:
     local_id = mwparserfromhell.parse(template_to_parse).filter_templates()[0].get('ID').value.lstrip()
 
     translations = list()
-    for description in mwparserfromhell.parse(template_to_parse).filter_templates()[0].get('description').value.filter_templates():
-        translation = {}
-        # prep stats and ignore everything that's not English or Swedish
-        if str(description.name) == 'sv':
-            n_sv_translations += 1
-        elif str(description.name) == 'en':
-            n_en_translations += 1
-        else:
-            continue
 
-        translation['language'] = str(description.name)
-        translation['value'] = str(description.get(1))
+    if '{{' in str(mwparserfromhell.parse(template_to_parse).filter_templates()[0].get('description').value):
+        print('done')
+        for description in mwparserfromhell.parse(template_to_parse).filter_templates()[0].get('description').value.filter_templates():
+            translation = {}
+            # prep stats and ignore everything that's not English or Swedish
+            if str(description.name) == 'sv':
+                n_sv_translations += 1
+            elif str(description.name) == 'en':
+                n_en_translations += 1
+            else:
+                continue
+
+            translation['language'] = str(description.name)
+            translation['value'] = str(description.get(1))
+            translations.append(translation)
+    else:
+        print('not done')
+        translation = {}
+        translation['value'] = str(mwparserfromhell.parse(template_to_parse).filter_templates()[0].get('description').value)
+        translation['language'] = 'sv'
+        n_sv_translations += 1
         translations.append(translation)
 
     final_obj = {}
